@@ -6,9 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class Article extends Model
 {
-    // public function getRouteKeyName()
-    // {
-    //     return 'slug'; //Article::where('slug', $article)->first()
-
-    // }
+    // protected $fillable = ['title', 'excerpt', 'body'];
+    protected $guarded = [];
 }
