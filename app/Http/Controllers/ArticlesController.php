@@ -25,16 +25,20 @@ class ArticlesController extends Controller
 
     public function create()
     {
-        return view('articles.create');
+        return view('articles.create', [
+            'tags' => Tag::all()
+        ]);
     }
 
     public function store()
     {
-        Article::create(request()->validate([
-            'title' => 'required',
-            'excerpt' => 'required',
-            'body' => 'required'
-        ]));
+        $this->validateArticle(); // tagsはAriticleモデルの属性ではないので、バリデーションは独立させる
+
+        $article = new Article(request(['title', 'excerpt', 'body'])); // Artilceモデルに必要なものを渡す
+        $article->user_id = 1;
+        $article->save();
+
+        $article->tags()->attach(request('tags'));
 
         return redirect(route('articles.index'));
     }
@@ -51,12 +55,13 @@ class ArticlesController extends Controller
         return redirect($article->path());
     }
 
-    protected function varidateArticle()
+    protected function validateArticle()
     {
         return request()->validate([
             'title' => 'required',
             'excerpt' => 'required',
-            'body' => 'required'
+            'body' => 'required',
+            'tags' => 'exists:tags,id'
         ]);
     }
 }
