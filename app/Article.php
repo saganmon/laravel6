@@ -8,4 +8,14 @@ class Article extends Model
 {
     // protected $fillable = ['title', 'excerpt', 'body'];
     protected $guarded = [];
+
+    public function path()
+    {
+        return route('articles.show', $this);
+    }
+
+    public function author()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
 }
